@@ -1,11 +1,32 @@
-﻿export default class CanvasUi extends HTMLElement {
+﻿import {FIELD_HEIGHT, FIELD_WIDTH} from "./consts";
+import {engine} from "./Engine";
+import {Subscription} from "rxjs";
+import {CellType} from "./CellType";
+
+export default class CanvasUi extends HTMLElement {
     constructor() {
-       super();
+        super();
     }
 
-    connectedCallback() {
-        this.innerHTML = '<canvas id="canvas" width="800" height="400" style="border: 1px solid black;"></canvas>';
-    }
+    dataSubscription:Subscription;
     
+    connectedCallback() {
+        this.innerHTML = `<canvas id="canvas" width="${FIELD_WIDTH}" height="${FIELD_HEIGHT}" style="border: 1px solid black;"></canvas>`;
+        
+        const canvas = <HTMLCanvasElement>document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        this.dataSubscription = engine.dataStream.subscribe(data => {
+            const imageData = new ImageData(data, FIELD_WIDTH, FIELD_HEIGHT);
+            ctx.putImageData(imageData, 0, 0);
+        });
+
+        engine.init();
+    }
+
+    disconnectedCallback(){
+        this.dataSubscription?.unsubscribe()
+    }
+
 }
 
