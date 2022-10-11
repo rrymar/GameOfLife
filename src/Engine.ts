@@ -3,6 +3,7 @@ import {FIELD_HEIGHT, FIELD_WIDTH} from "./consts";
 import {CellType} from "./CellType";
 
 const COLOR_SIZE: number = 4;
+const INIT_FULFILLMENT: number = 0.05;
 
 class Engine {
     generationNumber: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -17,7 +18,7 @@ class Engine {
     init() {
         for (let x = 0; x < FIELD_WIDTH; x++) {
             for (let y = 0; y < FIELD_HEIGHT; y++) {
-                const type: CellType = Math.floor(Math.random() * 2);
+                const type: CellType = Math.floor(Math.random() * (1 + INIT_FULFILLMENT));
                 this.setCell(x, y, type);
             }
         }

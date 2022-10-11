@@ -8,14 +8,20 @@ export default class CanvasUi extends HTMLElement {
         super();
     }
 
-    dataSubscription:Subscription;
-    
+    dataSubscription: Subscription;
+    genNumberSubscription: Subscription;
+
     connectedCallback() {
-        this.innerHTML = `<canvas id="canvas" width="${FIELD_WIDTH}" height="${FIELD_HEIGHT}" style="border: 1px solid black;"></canvas>`;
-        
+        this.innerHTML = `<p id="genNumber"></p><canvas id="canvas" width="${FIELD_WIDTH}" height="${FIELD_HEIGHT}" style="border: 1px solid black;"></canvas>`;
+
+        const gemNumber = document.getElementById('genNumber');
+        this.genNumberSubscription = engine.generationNumber.subscribe(n=>{
+           gemNumber.innerText = 'Generation ' + n; 
+        });
+
         const canvas = <HTMLCanvasElement>document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        
+
         this.dataSubscription = engine.dataStream.subscribe(data => {
             const imageData = new ImageData(data, FIELD_WIDTH, FIELD_HEIGHT);
             ctx.putImageData(imageData, 0, 0);
@@ -24,7 +30,7 @@ export default class CanvasUi extends HTMLElement {
         engine.init();
     }
 
-    disconnectedCallback(){
+    disconnectedCallback() {
         this.dataSubscription?.unsubscribe()
     }
 
