@@ -2,27 +2,29 @@
 import {CellType} from "./CellType";
 import DataStore, {FIELD_HEIGHT, FIELD_WIDTH} from "./DataStore";
 
-const INIT_FULFILLMENT: number = 0.01;
+const INIT_FULFILLMENT: number = 0.15;
 
 class Engine {
     generationNumber: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     dataStream: Subject<Uint8ClampedArray> = new Subject<Uint8ClampedArray>();
 
     store: DataStore = new DataStore();
-    nextGenData: Uint8ClampedArray;
+    nextGenStore: DataStore;
     
     init() {
+
         for (let x = 0; x < FIELD_WIDTH; x++) {
             for (let y = 0; y < FIELD_HEIGHT; y++) {
                 const type: CellType = Math.floor(Math.random() * (1 + INIT_FULFILLMENT));
                 this.store.setCell(x, y, type);
             }
         }
-
         this.streamData();
     }
 
     next() {
+
+        this.nextGenStore = new DataStore(this.store);
         for (let x = 0; x < FIELD_WIDTH; x++) {
             for (let y = 0; y < FIELD_HEIGHT; y++) {
                 const cell = this.store.getCell(x, y);
@@ -30,17 +32,17 @@ class Engine {
                 const aliveSublings = this.getAliveSublingsNumber(x, y);
                 if (cell == CellType.Alive) {
                     if (aliveSublings > 4 || aliveSublings < 2)
-                        this.store.setCell(x, y, CellType.Dead);
+                        this.nextGenStore.setCell(x, y, CellType.Dead);
                 } else {
                     if (aliveSublings === 3)
-                        this.store.setCell(x, y, CellType.Alive);
+                        this.nextGenStore.setCell(x, y, CellType.Alive);
                 }
             }
         }
 
+        this.store = this.nextGenStore;
         this.streamData();
     }
-
 
     private getAliveSublingsNumber(x: number, y: number): number {
         let toReturn = 0;
@@ -63,8 +65,6 @@ class Engine {
         this.generationNumber.next(this.generationNumber.value + 1);
         this.dataStream.next(this.store.data);
     }
-
-
 
 }
 

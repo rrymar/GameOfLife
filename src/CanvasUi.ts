@@ -1,6 +1,6 @@
 ﻿import {engine} from "./Engine";
 import {Subscription} from "rxjs";
-import {FIELD_HEIGHT, FIELD_WIDTH} from "./DataStore";
+import {CELL_SIZE, FIELD_HEIGHT, FIELD_WIDTH} from "./DataStore";
 
 export default class CanvasUi extends HTMLElement {
     constructor() {
@@ -11,7 +11,10 @@ export default class CanvasUi extends HTMLElement {
     genNumberSubscription: Subscription;
 
     connectedCallback() {
-        this.innerHTML = `<p id="genNumber"></p><canvas id="canvas" width="${FIELD_WIDTH}" height="${FIELD_HEIGHT}" style="border: 1px solid black;"></canvas>`;
+        const canvasWidth = FIELD_WIDTH * CELL_SIZE;
+        const canvasHeight = FIELD_HEIGHT * CELL_SIZE;
+        
+        this.innerHTML = `<p id="genNumber"></p><canvas id="canvas" width="${canvasWidth}" height="${canvasHeight}" style="border: 1px solid black;"></canvas>`;
 
         const gemNumber = document.getElementById('genNumber');
         this.genNumberSubscription = engine.generationNumber.subscribe(n => {
@@ -22,15 +25,15 @@ export default class CanvasUi extends HTMLElement {
         const ctx = canvas.getContext('2d');
         
         this.dataSubscription = engine.dataStream.subscribe(data => {
-            const imageData = new ImageData(data, FIELD_WIDTH, FIELD_HEIGHT);
+            const imageData = new ImageData(data, canvasWidth, canvasHeight);
             ctx.putImageData(imageData, 0, 0);
         });
 
         engine.init();
-        
-        window.setInterval(() => {
-            engine.next();
-        }, 10);
+
+        // window.setInterval(() => {
+        //     engine.next();
+        // }, 10);
 
         canvas.addEventListener('click',()=>{
             engine.next();
