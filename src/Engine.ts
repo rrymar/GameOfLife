@@ -31,7 +31,7 @@ class Engine {
 
                 const aliveSublings = this.getAliveSublingsNumber(x, y);
                 if (cell == CellType.Alive) {
-                    if (aliveSublings > 4 || aliveSublings < 2)
+                    if (aliveSublings > 3 || aliveSublings < 2)
                         this.nextGenStore.setCell(x, y, CellType.Dead);
                 } else {
                     if (aliveSublings === 3)

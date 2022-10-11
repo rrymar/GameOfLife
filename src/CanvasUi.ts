@@ -31,9 +31,9 @@ export default class CanvasUi extends HTMLElement {
 
         engine.init();
 
-        // window.setInterval(() => {
-        //     engine.next();
-        // }, 10);
+        window.setInterval(() => {
+            engine.next();
+        }, 100);
 
         canvas.addEventListener('click',()=>{
             engine.next();

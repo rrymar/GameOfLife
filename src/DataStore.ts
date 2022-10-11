@@ -4,9 +4,9 @@ const COLOR_SIZE: number = 4;
 const DEAD_ALFA_NUM = 10;
 const ALIVE_ALFA_NUM = 255;
 
-export const CELL_SIZE = 10;
-export const FIELD_WIDTH: number = 10;
-export const FIELD_HEIGHT: number = 10;
+export const CELL_SIZE = 1;
+export const FIELD_WIDTH: number = 400;
+export const FIELD_HEIGHT: number = 200;
 
 export default class DataStore {
     data: Uint8ClampedArray = new Uint8ClampedArray(FIELD_HEIGHT * FIELD_WIDTH * COLOR_SIZE * CELL_SIZE * CELL_SIZE);
@@ -16,7 +16,7 @@ export default class DataStore {
     }
 
     getCell(x: number, y: number): CellType {
-        const offset = y * CELL_SIZE * (FIELD_WIDTH * COLOR_SIZE) + x * CELL_SIZE * COLOR_SIZE;
+        const offset = y * CELL_SIZE * (FIELD_WIDTH * CELL_SIZE * COLOR_SIZE) + x * CELL_SIZE * COLOR_SIZE;
         switch (this.data[offset + 3]) {
             case ALIVE_ALFA_NUM:
                 return CellType.Alive;
@@ -28,7 +28,7 @@ export default class DataStore {
     setCell(x: number, y: number, type: CellType) {
         for (let i = 0; i < CELL_SIZE; i++) {
             for (let j = 0; j < CELL_SIZE; j++) {
-                const offset = (y*CELL_SIZE + j) * (FIELD_WIDTH * CELL_SIZE * COLOR_SIZE) + (x*CELL_SIZE + i) * COLOR_SIZE;
+                const offset = (y * CELL_SIZE + j) * (FIELD_WIDTH * CELL_SIZE * COLOR_SIZE) + (x * CELL_SIZE + i) * COLOR_SIZE;
                 console.log(x + " " + " " + y + " = " + offset);
                 switch (type) {
                     case CellType.Alive:
