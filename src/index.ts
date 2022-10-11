@@ -1,11 +1,4 @@
-﻿import * as _ from 'lodash-es';
+﻿import CanvasUi from "./CanvasUi";
 
-function component() {
-    const element = document.createElement('div');
+customElements.define("app-canvas-ui", CanvasUi);
 
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-
-    return element;
-}
-
-document.body.appendChild(component());
