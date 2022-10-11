@@ -1,7 +1,6 @@
-﻿import {FIELD_HEIGHT, FIELD_WIDTH} from "./consts";
-import {engine} from "./Engine";
+﻿import {engine} from "./Engine";
 import {Subscription} from "rxjs";
-import {CellType} from "./CellType";
+import {FIELD_HEIGHT, FIELD_WIDTH} from "./DataStore";
 
 export default class CanvasUi extends HTMLElement {
     constructor() {
