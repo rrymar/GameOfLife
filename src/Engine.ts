@@ -2,7 +2,7 @@
 import {CellType} from "./CellType";
 import DataStore, {FIELD_HEIGHT, FIELD_WIDTH} from "./DataStore";
 
-const INIT_FULFILLMENT: number = 0.15;
+const INIT_FULFILLMENT: number = 0.20;
 
 class Engine {
     generationNumber: BehaviorSubject<number> = new BehaviorSubject<number>(0);
