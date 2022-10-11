@@ -10,6 +10,8 @@ export default class CanvasUi extends HTMLElement {
     dataSubscription: Subscription;
     genNumberSubscription: Subscription;
 
+    lastGenerationTimeMs: number;
+    
     connectedCallback() {
         const canvasWidth = FIELD_WIDTH * CELL_SIZE;
         const canvasHeight = FIELD_HEIGHT * CELL_SIZE;
@@ -18,7 +20,7 @@ export default class CanvasUi extends HTMLElement {
 
         const gemNumber = document.getElementById('genNumber');
         this.genNumberSubscription = engine.generationNumber.subscribe(n => {
-            gemNumber.innerText = 'Generation ' + n;
+            gemNumber.innerText = `Generation #${n} - ${this.lastGenerationTimeMs} ms`;
         });
 
         const canvas = <HTMLCanvasElement>document.getElementById('canvas');
@@ -32,8 +34,12 @@ export default class CanvasUi extends HTMLElement {
         engine.init();
 
         window.setInterval(() => {
+            const start = performance.now();
             engine.next();
-        }, 100);
+            const end = performance.now();
+            this.lastGenerationTimeMs = Math.floor(end-start);
+
+        }, 50);
 
         canvas.addEventListener('click',()=>{
             engine.next();

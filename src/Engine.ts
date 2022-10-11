@@ -23,7 +23,6 @@ class Engine {
     }
 
     next() {
-
         this.nextGenStore = new DataStore(this.store);
         for (let x = 0; x < FIELD_WIDTH; x++) {
             for (let y = 0; y < FIELD_HEIGHT; y++) {
