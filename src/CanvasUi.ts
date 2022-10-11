@@ -39,7 +39,7 @@ export default class CanvasUi extends HTMLElement {
             const end = performance.now();
             this.lastGenerationTimeMs = Math.floor(end-start);
 
-        }, 50);
+        }, 100);
 
         canvas.addEventListener('click',()=>{
             engine.next();
@@ -47,7 +47,8 @@ export default class CanvasUi extends HTMLElement {
     }
 
     disconnectedCallback() {
-        this.dataSubscription?.unsubscribe()
+        this.dataSubscription?.unsubscribe();
+        this.genNumberSubscription.unsubscribe();
     }
 
 }
